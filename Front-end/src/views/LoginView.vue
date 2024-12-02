@@ -1,33 +1,97 @@
 <template>
-  <div class="min-h-screen flex items-center justify-center">
+  <div class="min-h-screen flex items-center justify-center bg-gray-100">
     <div class="max-w-md w-full space-y-8 p-8 bg-white rounded-lg shadow-md">
-      <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">Sign in to your account</h2>
-      <form class="mt-8 space-y-6" id="loginForm" @submit.prevent="handleLogin">
-        <div class="rounded-md shadow-sm -space-y-px">
+      <nav class="bg-indigo-600 p-4 rounded-md mb-6">
+        <router-link to="/" class="text-white text-xl font-bold text-center block">
+          Asset Management System
+        </router-link>
+      </nav>
+      <div>
+        <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">
+          Sign in to your account
+        </h2>
+      </div>
+      <form @submit.prevent="login" class="mt-8 space-y-6">
+        <div class="rounded-md shadow-sm space-y-4">
           <div>
-            <label for="email" class="sr-only">Email address</label>
-            <input id="email" name="email" type="email" required class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm my-4" placeholder="Email address">
+            <label for="email" class="block text-sm font-medium text-gray-700"
+              >Email address</label
+            >
+            <input
+              id="email"
+              v-model="email"
+              type="email"
+              required
+              class="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+              placeholder="Email address"
+            />
           </div>
           <div>
-            <label for="password" class="sr-only">Password</label>
-            <input id="password" name="password" type="password" required class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm" placeholder="Password">
+            <label
+              for="password"
+              class="block text-sm font-medium text-gray-700"
+              >Password</label
+            >
+            <input
+              id="password"
+              v-model="password"
+              type="password"
+              required
+              class="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+              placeholder="Password"
+            />
           </div>
         </div>
+
         <div>
-          <button type="submit" class="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">Sign in</button>
+          <button
+            type="submit"
+            class="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+          >
+            Sign in
+          </button>
         </div>
       </form>
+      <p class="mt-2 text-center text-sm text-gray-600">
+        Or
+        <router-link
+          to="/register"
+          class="font-medium text-indigo-600 hover:text-indigo-500"
+        >
+          create a new account
+        </router-link>
+      </p>
     </div>
   </div>
 </template>
 
-<script setup>
-import { ref } from 'vue';
+<script>
+import { api } from '../api';
 
-const email = ref('');
-const password = ref('');
-
-const handleLogin = async () => {
-  // Implement login logic here
+export default {
+  name: 'LoginView',
+  data() {
+    return {
+      email: '',
+      password: '',
+    };
+  },
+  methods: {
+    async login() {
+      try {
+        const response = await api.login(this.email, this.password);
+        // Handle successful login (e.g., store token, redirect)
+        localStorage.setItem('authToken', response.data.token);
+        this.$router.push('/dashboard');
+      } catch (error) {
+        console.error('Login failed:', error);
+        // Handle error (e.g., show message)
+      }
+    },
+  },
 };
 </script>
+
+<style scoped>
+/* Add any additional styles here */
+</style>
