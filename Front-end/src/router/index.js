@@ -13,6 +13,7 @@ import DeleteItem from "../components/DeleteItem.vue";
 import AssignedItems from "../components/AssignedItems.vue";
 import ReportIssue from "../components/ReportIssue.vue";
 import RequestItem from "../components/RequestItem.vue";
+import ManageItems from '../components/ManageItems.vue';
 
 const isAuthenticated = () => {
   return !!localStorage.getItem("authToken"); // Check if the token exists
@@ -43,6 +44,7 @@ const routes = [
   { path: "/assigned-items", name: "assigned-items", component: AssignedItems },
   { path: "/report-issue", name: "report-issue", component: ReportIssue },
   { path: "/request-item", name: "request-item", component: RequestItem },
+  { path: "/manage-items", name: "manage-items", component: ManageItems },
 ];
 
 const router = createRouter({
