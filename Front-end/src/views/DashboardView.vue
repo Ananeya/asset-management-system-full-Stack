@@ -10,8 +10,14 @@
             </router-link>
           </div>
           <div class="flex items-center">
-            <span id="userInfo" class="text-white mr-4">User Info</span>
-            <button id="logoutBtn" class="text-white hover:text-gray-200 p-3">
+            <span id="userInfo" class="text-white mr-4" v-if="user">
+              {{ user.username }} ({{ user.role }})
+            </span>
+            <button 
+              id="logoutBtn" 
+              @click="logout" 
+              class="text-white hover:text-gray-200 p-3"
+            >
               Logout
             </button>
           </div>
@@ -91,12 +97,11 @@
               class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-purple-600 hover:bg-purple-700">
               Add New Item
             </button>
-
             <button data-role="employee" @click="navigateTo('items.html?view=assigned')" 
               class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700">
               View My Items
             </button>
-            <button data-role="employee" @click="navigateTo('request.html')" 
+            <button data-role="employee" @click="openRequestItemModal" 
               class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700">
               Request Item
             </button>
@@ -120,10 +125,38 @@
 </template>
 
 <script>
+import { ref, onMounted } from 'vue';
 import { api } from '../api';
 
 export default {
   name: 'DashboardView',
+  setup() {
+    const user = ref(null); // Reactive user object
+
+    onMounted(() => {
+      const storedUser = JSON.parse(localStorage.getItem('user')); // Retrieve user data from localStorage
+      console.log('Stored User:', storedUser); // Debugging line
+      user.value = storedUser; // Set user data
+    });
+
+    const logout = () => {
+      localStorage.removeItem('authToken'); // Remove token
+      localStorage.removeItem('user'); // Remove user data
+      window.location.href = '/'; // Redirect to login page
+    };
+
+    const navigateToRequestItem = () => {
+      this.$router.push({ name: 'request-item' }); // Redirect to the Request Item page
+    };
+
+    const openRequestItemModal = () => {
+      // Logic to open the request item modal
+      // You can use a modal component or redirect to a request item page
+      this.$router.push({ name: 'request-item' });
+    };
+
+    return { user, logout, navigateToRequestItem, openRequestItemModal }; // Return user and logout method to template
+  },
   data() {
     return {
       totalItems: 0,
@@ -158,5 +191,5 @@ export default {
 </script>
 
 <style scoped>
-/* Add any additional styles here */
+
 </style>

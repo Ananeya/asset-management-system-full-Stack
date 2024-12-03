@@ -8,6 +8,8 @@
 </template>
 
 <script>
+import { api } from '../api';
+
 export default {
   data() {
     return {
@@ -17,7 +19,14 @@ export default {
     };
   },
   async created() {
-    // Fetch dashboard stats from the API
+    try {
+      const response = await api.fetchDashboardData();
+      this.totalItems = response.data.totalItems;
+      this.availableItems = response.data.availableItems;
+      this.pendingIssues = response.data.pendingIssues;
+    } catch (error) {
+      console.error('Error fetching dashboard data:', error);
+    }
   },
 };
 </script>

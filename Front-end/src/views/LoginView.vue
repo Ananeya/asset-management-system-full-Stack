@@ -80,12 +80,12 @@ export default {
     async login() {
       try {
         const response = await api.login(this.email, this.password);
-        // Handle successful login (e.g., store token, redirect)
         localStorage.setItem('authToken', response.data.token);
-        this.$router.push('/dashboard');
+        localStorage.setItem('user', JSON.stringify(response.data.user));
+        this.$router.push({ name: 'dashboard' });
       } catch (error) {
         console.error('Login failed:', error);
-        // Handle error (e.g., show message)
+        alert('Login failed. Please check your credentials and try again.');
       }
     },
   },
