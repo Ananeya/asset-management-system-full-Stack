@@ -89,21 +89,26 @@
         <div class="px-4 py-5 sm:p-6">
           <h3 class="text-lg leading-6 font-medium text-gray-900 mb-4">Quick Actions</h3>
           <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-            <router-link to="/manage-items" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700">
+            <router-link 
+              :to="{ name: 'manage-items' }" 
+              class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700">
               Manage Items
             </router-link>
-            <button data-role="storekeeper" @click="addNewItem" 
+            <router-link 
+              :to="{ name: 'request-item' }" 
               class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-purple-600 hover:bg-purple-700">
-              Add New Item
-            </button>
-            <button data-role="employee" @click="navigateTo('items.html?view=assigned')" 
+              Request Item
+            </router-link>
+            <router-link 
+              :to="{ name: 'assigned-items' }" 
               class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700">
               View My Items
-            </button>
-            <button data-role="employee" @click="openRequestItemModal" 
-              class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700">
-              Request Item
-            </button>
+            </router-link>
+            <router-link 
+              :to="{ name: 'report-issue' }" 
+              class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-yellow-600 hover:bg-yellow-700">
+              Report Issue
+            </router-link>
           </div>
         </div>
       </div>

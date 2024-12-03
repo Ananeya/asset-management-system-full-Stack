@@ -46,9 +46,11 @@
         <div class="px-4 py-5 sm:p-6">
           <div class="flex justify-between items-center mb-4">
             <h2 class="text-lg font-medium text-gray-900">Items</h2>
-            <button @click="addItem" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700">
+            <router-link 
+              :to="{ name: 'add-item' }" 
+              class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700">
               Add New Item
-            </button>
+            </router-link>
           </div>
           <div class="overflow-x-auto">
             <table class="min-w-full divide-y divide-gray-200">
@@ -130,6 +132,10 @@ export default {
       }
     };
 
+    const navigateToAddItem = () => {
+      this.$router.push({ name: 'add-item' });
+    };
+
     fetchItems();
 
     return {
@@ -142,6 +148,7 @@ export default {
       addItem,
       editItem,
       deleteItem,
+      navigateToAddItem,
     };
   },
 };

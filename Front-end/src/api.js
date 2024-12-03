@@ -12,7 +12,11 @@ export const api = {
   }),
   requestItem: (category, reason) => axios.post(`${API_URL}/request`, { category, reason }),
   fetchItems: () => axios.get(`${API_URL}/items`),
-  addItem: (item) => axios.post(`${API_URL}/items`, item),
+  addItem: (itemData) => axios.post(`${API_URL}/items`, itemData, {
+    headers: {
+      Authorization: localStorage.getItem('authToken'),
+    },
+  }),
   updateItem: (item) => axios.put(`${API_URL}/items/${item.id}`, item),
   deleteItem: (itemId) => axios.delete(`${API_URL}/items/${itemId}`),
   getAssignedItems: () => axios.get(`${API_URL}/items/assigned`),
