@@ -19,9 +19,21 @@ export const api = {
   }),
   updateItem: (item) => axios.put(`${API_URL}/items/${item.id}`, item),
   deleteItem: (itemId) => axios.delete(`${API_URL}/items/${itemId}`),
-  getAssignedItems: () => axios.get(`${API_URL}/items/assigned`),
-  reportIssue: (issueData) => axios.post(`${API_URL}/items/report`, issueData),
-  requestItem: (requestData) => axios.post(`${API_URL}/items/request`, requestData),
+  getAssignedItems: () => axios.get(`${API_URL}/items/assigned`, {
+    headers: {
+      Authorization: localStorage.getItem('authToken'),
+    },
+  }),
+  reportIssue: (issueData) => axios.post(`${API_URL}/issues/report`, issueData, {
+    headers: {
+      Authorization: localStorage.getItem('authToken'),
+    },
+  }),
+  requestItem: (requestData) => axios.post(`${API_URL}/items/request`, requestData, {
+    headers: {
+      Authorization: localStorage.getItem('authToken'),
+    },
+  }),
   refreshToken: async () => {
     const response = await axios.post(`${API_URL}/auth/refresh-token`, {}, {
       headers: {
@@ -37,6 +49,11 @@ export const api = {
     },
   }),
   getEmployees: () => axios.get(`${API_URL}/auth/employees`, {
+    headers: {
+      Authorization: localStorage.getItem('authToken'),
+    },
+  }),
+  returnItem: (itemId) => axios.post(`${API_URL}/items/${itemId}/return`, {}, {
     headers: {
       Authorization: localStorage.getItem('authToken'),
     },
