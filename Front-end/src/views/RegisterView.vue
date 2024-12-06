@@ -125,16 +125,8 @@ export default {
       try {
         this.isLoading = true;
         
-        // Log the data being sent (for debugging)
-        console.log('Sending registration data:', {
-          username: this.username,
-          email: this.email,
-          password: this.password,
-          role: this.role
-        });
-
-        // Send registration request
-        const response = await api.register({
+        // Register the user
+        const registerResponse = await api.register({
           username: this.username,
           email: this.email,
           password: this.password,
@@ -142,15 +134,17 @@ export default {
           role: this.role
         });
 
-        console.log('Registration response:', response); // Debug log
-
-        // Show success message
-        alert('Registration successful! Please log in.');
+        // Automatically log in the user
+        const loginResponse = await api.login(this.email, this.password);
         
-        // Redirect to login page
-        this.$router.push('/login');
+        // Store auth data
+        localStorage.setItem('authToken', loginResponse.data.token);
+        localStorage.setItem('user', JSON.stringify(loginResponse.data.user));
+        
+        // Redirect to dashboard
+        this.$router.push('/dashboard');
       } catch (error) {
-        console.error('Registration error details:', error.response?.data); // More detailed error logging
+        console.error('Registration error details:', error.response?.data);
         this.error = error.response?.data?.message || 'Registration failed. Please try again.';
       } finally {
         this.isLoading = false;
