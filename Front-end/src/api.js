@@ -11,7 +11,11 @@ export const api = {
     },
   }),
   requestItem: (category, reason) => axios.post(`${API_URL}/request`, { category, reason }),
-  fetchItems: () => axios.get(`${API_URL}/items`),
+  fetchItems: () => axios.get(`${API_URL}/items`, {
+    headers: {
+      Authorization: localStorage.getItem('authToken'),
+    },
+  }),
   addItem: (itemData) => axios.post(`${API_URL}/items`, itemData, {
     headers: {
       Authorization: localStorage.getItem('authToken'),

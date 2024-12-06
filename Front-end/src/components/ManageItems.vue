@@ -64,14 +64,38 @@
                 </tr>
               </thead>
               <tbody class="bg-white divide-y divide-gray-200">
-                <tr v-for="item in filteredItems" :key="item._id">
+                <tr v-for="item in filteredItems" :key="item._id" class="hover:bg-gray-50">
                   <td class="px-6 py-4 whitespace-nowrap">{{ item.name }}</td>
                   <td class="px-6 py-4 whitespace-nowrap">{{ item.category }}</td>
-                  <td class="px-6 py-4 whitespace-nowrap">{{ item.availability ? 'Available' : 'Assigned' }}</td>
-                  <td class="px-6 py-4 whitespace-nowrap">{{ item.assignedTo ? item.assignedTo.username : 'N/A' }}</td>
                   <td class="px-6 py-4 whitespace-nowrap">
-                    <button @click="editItem(item)" class="text-indigo-600 hover:text-indigo-900">Edit</button>
-                    <button @click="deleteItem(item._id)" class="text-red-600 hover:text-red-900 ml-4">Delete</button>
+                    <span :class="{
+                      'px-2 py-1 rounded-full text-xs font-medium': true,
+                      'bg-green-100 text-green-800': item.availability,
+                      'bg-red-100 text-red-800': !item.availability
+                    }">
+                      {{ item.availability ? 'Available' : 'Assigned' }}
+                    </span>
+                  </td>
+                  <td class="px-6 py-4 whitespace-nowrap">
+                    <span v-if="item.assignedTo">{{ item.assignedTo.username }}</span>
+                    <span v-else class="text-gray-400">N/A</span>
+                  </td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm">
+                    <button 
+                      @click="editItem(item)" 
+                      class="text-indigo-600 hover:text-indigo-900 mr-4">
+                      Edit
+                    </button>
+                    <button 
+                      @click="deleteItem(item._id)"
+                      class="text-red-600 hover:text-red-900">
+                      Delete
+                    </button>
+                  </td>
+                </tr>
+                <tr v-if="filteredItems.length === 0">
+                  <td colspan="5" class="px-6 py-4 text-center text-gray-500">
+                    No items found
                   </td>
                 </tr>
               </tbody>
