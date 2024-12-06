@@ -40,7 +40,7 @@
               <div class="ml-5 w-0 flex-1">
                 <dl>
                   <dt class="text-sm font-medium text-gray-500 truncate">Total Items</dt>
-                  <dd id="totalItems" class="text-lg font-medium text-gray-900">Loading...</dd>
+                  <dd id="totalItems" class="text-lg font-medium text-gray-900">{{ stats.total || 0 }}</dd>
                 </dl>
               </div>
             </div>
@@ -58,7 +58,7 @@
               <div class="ml-5 w-0 flex-1">
                 <dl>
                   <dt class="text-sm font-medium text-gray-500 truncate">Available Items</dt>
-                  <dd id="availableItems" class="text-lg font-medium text-gray-900">Loading...</dd>
+                  <dd id="availableItems" class="text-lg font-medium text-gray-900">{{ stats.available || 0 }}</dd>
                 </dl>
               </div>
             </div>
@@ -76,7 +76,7 @@
               <div class="ml-5 w-0 flex-1">
                 <dl>
                   <dt class="text-sm font-medium text-gray-500 truncate">Pending Issues</dt>
-                  <dd id="pendingIssues" class="text-lg font-medium text-gray-900">Loading...</dd>
+                  <dd id="pendingIssues" class="text-lg font-medium text-gray-900">{{ stats.pendingIssues || 0 }}</dd>
                 </dl>
               </div>
             </div>
@@ -135,59 +135,40 @@ import { api } from '../api';
 export default {
   name: 'DashboardView',
   setup() {
-    const user = ref(null); // Reactive user object
-
-    onMounted(() => {
-      const storedUser = JSON.parse(localStorage.getItem('user')); // Retrieve user data from localStorage
-      console.log('Stored User:', storedUser); // Debugging line
-      user.value = storedUser; // Set user data
+    const user = ref(null);
+    const stats = ref({
+      total: 0,
+      available: 0,
+      pendingIssues: 0
     });
 
-    const logout = () => {
-      localStorage.removeItem('authToken'); // Remove token
-      localStorage.removeItem('user'); // Remove user data
-      window.location.href = '/'; // Redirect to login page
-    };
-
-    const navigateToRequestItem = () => {
-      this.$router.push({ name: 'request-item' }); // Redirect to the Request Item page
-    };
-
-    const openRequestItemModal = () => {
-      // Logic to open the request item modal
-      // You can use a modal component or redirect to a request item page
-      this.$router.push({ name: 'request-item' });
-    };
-
-    return { user, logout, navigateToRequestItem, openRequestItemModal }; // Return user and logout method to template
-  },
-  data() {
-    return {
-      stats: {
-        total: 0,
-        available: 0,
-        pendingIssues: 0
-      },
-      user: JSON.parse(localStorage.getItem('user'))
-    };
-  },
-  async created() {
-    await this.fetchStats();
-  },
-  methods: {
-    async fetchStats() {
+    const fetchStats = async () => {
       try {
         const response = await api.getItemStats();
-        this.stats = response.data;
+        stats.value = response.data;
       } catch (error) {
         console.error('Error fetching stats:', error);
       }
-    },
-    logout() {
+    };
+
+    onMounted(async () => {
+      const storedUser = JSON.parse(localStorage.getItem('user'));
+      user.value = storedUser;
+      await fetchStats();
+    });
+
+    const logout = () => {
       localStorage.removeItem('authToken');
       localStorage.removeItem('user');
-      this.$router.push('/login');
-    }
+      window.location.href = '/login';
+    };
+
+    return {
+      user,
+      stats,
+      logout,
+      fetchStats
+    };
   }
 };
 </script>
