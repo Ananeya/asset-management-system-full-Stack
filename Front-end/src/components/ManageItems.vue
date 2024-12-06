@@ -83,8 +83,13 @@
                   <td class="px-6 py-4 whitespace-nowrap text-sm">
                     <button 
                       @click="editItem(item)" 
-                      class="px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800 hover:bg-blue-200 mr-4">
+                      class="px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800 hover:bg-blue-200 mr-2">
                       Edit
+                    </button>
+                    <button 
+                      @click="assignItem(item)" 
+                      class="px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800 hover:bg-green-200 mr-2">
+                      Assign
                     </button>
                     <button 
                       @click="deleteItem(item._id)"
@@ -176,6 +181,18 @@ export default {
       deleteItem,
       navigateToAddItem,
     };
+  },
+  methods: {
+    async assignItem(item) {
+      try {
+        // You can implement your assignment logic here
+        // For example, open a modal to select a user
+        console.log('Assigning item:', item);
+        // Example: this.$router.push({ name: 'assign-item', params: { id: item._id } });
+      } catch (error) {
+        console.error('Error assigning item:', error);
+      }
+    },
   },
 };
 </script>
