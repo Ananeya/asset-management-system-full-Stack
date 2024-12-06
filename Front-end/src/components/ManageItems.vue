@@ -83,12 +83,12 @@
                   <td class="px-6 py-4 whitespace-nowrap text-sm">
                     <button 
                       @click="editItem(item)" 
-                      class="text-indigo-600 hover:text-indigo-900 mr-4">
+                      class="px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800 hover:bg-blue-200 mr-4">
                       Edit
                     </button>
                     <button 
                       @click="deleteItem(item._id)"
-                      class="text-red-600 hover:text-red-900">
+                      class="px-2 py-1 rounded-full text-xs font-medium bg-red-100 text-red-800 hover:bg-red-200">
                       Delete
                     </button>
                   </td>
@@ -144,7 +144,9 @@ export default {
     };
 
     const editItem = (item) => {
-      // Logic to edit an item
+      // Logic to navigate to the edit item page or open a modal
+      console.log('Edit item:', item);
+      // Example: this.$router.push({ name: 'edit-item', params: { id: item._id } });
     };
 
     const deleteItem = async (itemId) => {
