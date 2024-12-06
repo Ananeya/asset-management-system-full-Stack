@@ -72,4 +72,9 @@ export const api = {
       Authorization: localStorage.getItem('authToken'),
     },
   }),
+  getRecentActivity: () => axios.get(`${API_URL}/items/recent-activity`, {
+    headers: {
+      Authorization: localStorage.getItem('authToken'),
+    },
+  }),
 };
