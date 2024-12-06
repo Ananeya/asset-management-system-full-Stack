@@ -4,7 +4,7 @@ const API_URL = 'http://localhost:5000/api'; // Adjust the URL as needed
 
 export const api = {
   login: (email, password) => axios.post(`${API_URL}/auth/login`, { email, password }),
-  register: (username, email, password, role) => axios.post(`${API_URL}/auth/register`, { username, email, password, role }),
+  register: (userData) => axios.post(`${API_URL}/auth/register`, userData),
   fetchDashboardData: () => axios.get(`${API_URL}/dashboard`, {
     headers: {
       Authorization: localStorage.getItem('authToken'),
@@ -24,7 +24,7 @@ export const api = {
       Authorization: localStorage.getItem('authToken'),
     },
   }),
-  reportIssue: (issueData) => axios.post(`${API_URL}/issues/report`, issueData, {
+  reportIssue: (itemId, issueData) => axios.post(`${API_URL}/items/${itemId}/report-issue`, issueData, {
     headers: {
       Authorization: localStorage.getItem('authToken'),
     },
@@ -54,6 +54,16 @@ export const api = {
     },
   }),
   returnItem: (itemId) => axios.post(`${API_URL}/items/${itemId}/return`, {}, {
+    headers: {
+      Authorization: localStorage.getItem('authToken'),
+    },
+  }),
+  getItemStats: () => axios.get(`${API_URL}/items/stats`, {
+    headers: {
+      Authorization: localStorage.getItem('authToken'),
+    },
+  }),
+  searchItems: (query) => axios.get(`${API_URL}/items/search?query=${query}`, {
     headers: {
       Authorization: localStorage.getItem('authToken'),
     },

@@ -163,34 +163,32 @@ export default {
   },
   data() {
     return {
-      totalItems: 0,
-      availableItems: 0,
-      pendingIssues: 0,
-      recentActivity: [],
+      stats: {
+        total: 0,
+        available: 0,
+        pendingIssues: 0
+      },
+      user: JSON.parse(localStorage.getItem('user'))
     };
   },
   async created() {
-    await this.fetchDashboardData();
+    await this.fetchStats();
   },
   methods: {
-    async fetchDashboardData() {
+    async fetchStats() {
       try {
-        const response = await api.fetchDashboardData();
-        this.totalItems = response.data.totalItems;
-        this.availableItems = response.data.availableItems;
-        this.pendingIssues = response.data.pendingIssues;
-        this.recentActivity = response.data.recentActivity; // Adjust based on your API response
+        const response = await api.getItemStats();
+        this.stats = response.data;
       } catch (error) {
-        console.error('Failed to fetch dashboard data:', error);
+        console.error('Error fetching stats:', error);
       }
     },
-    navigateTo(url) {
-      window.location.href = url; // Adjust as needed for Vue Router
-    },
-    addNewItem() {
-      // Logic to add a new item
-    },
-  },
+    logout() {
+      localStorage.removeItem('authToken');
+      localStorage.removeItem('user');
+      this.$router.push('/login');
+    }
+  }
 };
 </script>
 

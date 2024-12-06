@@ -117,12 +117,12 @@ export default {
 
     const submitRequest = async () => {
       try {
-        await api.requestItem({
-          name: itemName.value,
+        const requestData = {
           category: category.value,
-          reason: reason.value,
-          urgency: urgency.value,
-        });
+          reason: reason.value
+        };
+        
+        await api.requestItem(requestData);
         alert('Request submitted successfully');
         router.push('/dashboard');
       } catch (error) {

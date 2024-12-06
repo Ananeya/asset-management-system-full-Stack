@@ -85,12 +85,15 @@ export default {
   methods: {
     async searchItems() {
       try {
-        const response = await api.fetchItems(); // Fetch all items
-        this.items = response.data.filter(item => 
-          item.name.includes(this.searchQuery) || item.category.includes(this.searchQuery)
-        );
+        if (!this.searchQuery.trim()) {
+          const response = await api.fetchItems();
+          this.items = response.data;
+        } else {
+          const response = await api.searchItems(this.searchQuery);
+          this.items = response.data;
+        }
       } catch (error) {
-        console.error('Error fetching items:', error);
+        console.error('Error searching items:', error);
       }
     },
     assignItem(itemId) {

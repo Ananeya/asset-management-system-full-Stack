@@ -159,14 +159,13 @@ export default {
 
     const submitIssue = async () => {
       try {
-        await api.reportIssue({
-          itemName: itemName.value,
-          category: category.value,
+        const issueData = {
           issueType: issueType.value,
-          priority: priority.value,
           description: description.value,
-        });
+          priority: priority.value
+        };
         
+        await api.reportIssue(route.params.itemId, issueData);
         showNotification('Issue reported successfully');
         router.push('/dashboard');
       } catch (error) {

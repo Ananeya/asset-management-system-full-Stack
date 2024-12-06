@@ -15,6 +15,12 @@
           </router-link>
         </p>
       </div>
+      
+      <!-- Error Alert -->
+      <div v-if="error" class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+        <span class="block sm:inline">{{ error }}</span>
+      </div>
+
       <form @submit.prevent="register" class="mt-8 space-y-6">
         <div class="rounded-md shadow-sm space-y-4">
           <div>
@@ -54,8 +60,10 @@
 
         <div>
           <button type="submit" 
-            class="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-            Register
+            :disabled="isLoading"
+            class="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:bg-indigo-400">
+            <span v-if="isLoading">Registering...</span>
+            <span v-else>Register</span>
           </button>
         </div>
       </form>
@@ -65,9 +73,14 @@
 
 <script>
 import { api } from '../api';
+import { useRouter } from 'vue-router';
 
 export default {
   name: 'RegisterView',
+  setup() {
+    const router = useRouter();
+    return { router };
+  },
   data() {
     return {
       username: '',
@@ -75,17 +88,72 @@ export default {
       password: '',
       confirmPassword: '',
       role: '',
+      error: null,
+      isLoading: false
     };
   },
   methods: {
     async register() {
+      // Reset error state
+      this.error = null;
+
+      // Validate passwords match
+      if (this.password !== this.confirmPassword) {
+        this.error = "Passwords do not match";
+        return;
+      }
+
+      // Validate password length
+      if (this.password.length < 6) {
+        this.error = "Password must be at least 6 characters long";
+        return;
+      }
+
+      // Validate email format
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(this.email)) {
+        this.error = "Please enter a valid email address";
+        return;
+      }
+
+      // Validate role selection
+      if (!this.role) {
+        this.error = "Please select a role";
+        return;
+      }
+
       try {
-        await api.register(this.username, this.email, this.password, this.role);
-        // Handle successful registration (e.g., redirect to login)
+        this.isLoading = true;
+        
+        // Log the data being sent (for debugging)
+        console.log('Sending registration data:', {
+          username: this.username,
+          email: this.email,
+          password: this.password,
+          role: this.role
+        });
+
+        // Send registration request
+        const response = await api.register({
+          username: this.username,
+          email: this.email,
+          password: this.password,
+          confirmPassword: this.confirmPassword,
+          role: this.role
+        });
+
+        console.log('Registration response:', response); // Debug log
+
+        // Show success message
+        alert('Registration successful! Please log in.');
+        
+        // Redirect to login page
         this.$router.push('/login');
       } catch (error) {
-        console.error('Registration failed:', error);
-        // Handle error (e.g., show message)
+        console.error('Registration error details:', error.response?.data); // More detailed error logging
+        this.error = error.response?.data?.message || 'Registration failed. Please try again.';
+      } finally {
+        this.isLoading = false;
       }
     },
   },
@@ -93,5 +161,7 @@ export default {
 </script>
 
 <style scoped>
-/* Add any additional styles here */
+.disabled\:bg-indigo-400:disabled {
+  background-color: #818cf8;
+}
 </style>
