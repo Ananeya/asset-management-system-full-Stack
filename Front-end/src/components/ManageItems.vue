@@ -115,10 +115,12 @@
 <script>
 import { ref, computed } from 'vue';
 import { api } from '../api';
+import { useRouter } from 'vue-router';
 
 export default {
   name: 'ManageItems',
   setup() {
+    const router = useRouter();
     const items = ref([]);
     const searchQuery = ref('');
     const selectedCategory = ref('');
@@ -148,10 +150,18 @@ export default {
       // Logic to add a new item
     };
 
-    const editItem = (item) => {
-      // Logic to navigate to the edit item page or open a modal
-      console.log('Edit item:', item);
-      // Example: this.$router.push({ name: 'edit-item', params: { id: item._id } });
+    const editItem = async (item) => {
+      try {
+        // Navigate to an edit form page with the item data
+        router.push({
+          name: 'edit-item',
+          params: { id: item._id },
+          // Pass item data as route state
+          state: { item }
+        });
+      } catch (error) {
+        console.error('Error navigating to edit page:', error);
+      }
     };
 
     const deleteItem = async (itemId) => {

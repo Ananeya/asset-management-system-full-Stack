@@ -15,6 +15,7 @@ import ReportIssue from "../components/ReportIssue.vue";
 import RequestItem from "../components/RequestItem.vue";
 import ManageItems from "../components/ManageItems.vue";
 import AddItem from "../components/AddItem.vue";
+import EditItem from '../components/EditItem.vue';
 
 const isAuthenticated = () => {
   return !!localStorage.getItem("authToken"); // Check if the token exists
@@ -51,6 +52,12 @@ const routes = [
     name: "add-item",
     component: AddItem,
   },
+  {
+    path: '/edit-item/:id',
+    name: 'edit-item',
+    component: EditItem,
+    meta: { requiresAuth: true }
+  }
 ];
 
 const router = createRouter({

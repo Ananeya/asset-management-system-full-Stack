@@ -21,7 +21,22 @@ export const api = {
       Authorization: localStorage.getItem('authToken'),
     },
   }),
-  updateItem: (item) => axios.put(`${API_URL}/items/${item.id}`, item),
+  updateItem: async (itemId, itemData) => {
+    try {
+      const response = await fetch(`${API_URL}/api/items/${itemId}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${getToken()}` // Ensure you have authentication
+        },
+        body: JSON.stringify(itemData)
+      });
+      return await response.json();
+    } catch (error) {
+      console.error('Error updating item:', error);
+      throw error;
+    }
+  },
   deleteItem: (itemId) => axios.delete(`${API_URL}/items/${itemId}`),
   getAssignedItems: () => axios.get(`${API_URL}/items/assigned`, {
     headers: {
